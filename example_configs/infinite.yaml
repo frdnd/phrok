@@ -1,0 +1,10 @@
+img_initialization: black
+iterations: 50
+lr: 0.1
+modeltype: resnet50_coco
+neuron: 419
+octave_scale: 1.4
+octaves: 10
+offset: 0.01
+resnet_bnck: 2
+resnet_subnck: 4
