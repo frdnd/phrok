@@ -57,7 +57,7 @@ render the [cactus example](https://github.com/frdnd/phrok/blob/master/out_ref/c
 
 or equivalent
 
-`python3 dream.py  --img_initialization "black" --iterations 30 --lr 0.1 --modeltype resnet50_coco --neuron 478 --octave_scale 1.4 --octaves 20 --offset 0.0001 --resnet_bnck 2 --resnet_sub_bnck 0`
+`python3 dream.py  --img_initialization "black" --iterations 30 --lr 0.1 --modeltype resnet50_coco --neuron 478 --octave_scale 1.4 --octaves 20 --offset 0.0001 --layer 6 --bottleneck 0`
 
 which gives:
 
