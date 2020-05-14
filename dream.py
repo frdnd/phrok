@@ -81,15 +81,16 @@ class Vgg19Dreamer(Dreamer):
     def __init__(self, type, layer, **kwargs):
         super().__init__()
         self.network = None
-        if type == "imagenet":
-            self.network = models.vgg19(pretrained=True).feature
+        self.type = type
+        if self.type == "imagenet":
+            self.network = models.vgg19(pretrained=True)
         self.set_model(layer)
 
     def set_model(self, layer, **kwargs):
         if layer == self.layer:
             return
         self.layer = layer
-        layers = list(self.network.features.body.children())
+        layers = list(self.network.features.children())
         model = nn.Sequential(*layers[: (self.layer + 1)])
         if torch.cuda.is_available:
             model = model.cuda()
