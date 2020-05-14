@@ -1,10 +1,10 @@
+bottleneck: 2
 img_initialization: black
 iterations: 30
+layer: 6
 lr: 0.1
 modeltype: resnet50_coco
 neuron: 660
 octave_scale: 1.4
 octaves: 10
 offset: 0.01
-resnet_bnck: 2
-resnet_subnck: 2

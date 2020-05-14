@@ -8,6 +8,49 @@ All images in [out_ref](https://github.com/frdnd/phrok/tree/master/out_ref) were
 ## Render an example
 display all options with `python3 dream.py -h`
 
+```usage: dream.py [-h] [--iterations ITERATIONS] [--layer LAYER]
+                [--bottleneck BOTTLENECK] [--lr LR]
+                [--octave_scale OCTAVE_SCALE] [--octaves OCTAVES]
+                [--neuron NEURON] [--offset OFFSET] [--img_width IMG_WIDTH]
+                [--img_height IMG_HEIGHT]
+                [--img_initialization {black,input_img}]
+                [--input_image INPUT_IMAGE]
+                [--modeltype {resnet50_coco,resnet50_keypoint,resnet50_imagenet,vgg19_imagenet}]
+                [--out_path OUT_PATH] [--from_example FROM_EXAMPLE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --iterations ITERATIONS
+                        number of gradient ascent steps per octave
+  --layer LAYER         layer used
+  --bottleneck BOTTLENECK
+                        bottleneck only applicable to resnet50 models
+  --lr LR               learning rate, the higher the more detail
+  --octave_scale OCTAVE_SCALE
+                        image scale between octaves
+  --octaves OCTAVES     number of octaves, the higher the more recursion
+  --neuron NEURON       neuron/channel at which the loss is computed, -1
+                        evaluates all neurons/channels
+  --offset OFFSET       neuron/channel at which the loss is computed, -1
+                        evaluates all neurons/channels
+  --img_width IMG_WIDTH
+                        image width, if img_initialization is not input_img.
+                        maximum size depends on gpu memory.
+  --img_height IMG_HEIGHT
+                        image height, if img_initialization is not input_img
+                        maximum size depends on gpu memory.
+  --img_initialization {black,input_img}
+                        initialization of the image, if no input image is
+                        provided
+  --input_image INPUT_IMAGE
+                        path to input image
+  --modeltype {resnet50_coco,resnet50_keypoint,resnet50_imagenet,vgg19_imagenet}
+                        network to use for dreaming
+  --out_path OUT_PATH   output directory
+  --from_example FROM_EXAMPLE
+                        load a config from the examples
+```
+
 render the [cactus example](https://github.com/frdnd/phrok/blob/master/out_ref/cactus.jpg)
 
 `python3 dream.py --from_example example_configs/cactus.yaml`
@@ -30,16 +73,24 @@ if you want to apply this to a input real input image use `python3 dream.py --im
 
 ## Parameter ranges
 VGG19 can be expressed as a pure sequential model, due to this the only parameter needed is `layers` and `neurons`.
-For Resnet50 I'm sticking to the model structure of the pytorch model for convenience, this model has 4 bottleneck layers (`resnet_bnk` parameter) which have
-again several bottlenecks embedded (`resnet_sub_bnck`).
 
-The number os neurons/channels for Resnet50 for each layer are:
+The number os neurons/channels for each layer in VGG19 are:
 
-| resnet_bnk | resnet_sub_bnck | neurons |
+| layer | neurons |
+| :-----: | :-----: |
+| [0..4] | 64 |
+| [5..10] | 128 |
+| [11..19] | 256 |
+| [20..36] | 512 |
+
+Resnet50 starts with 4 conventional layers (Conv/BN/Relu/Maxpool), the following layers are modules built from bottleneck layers,
+ therefore the additional bottle `bottleneck` argument is used (addressing the single layers in a bottleneck layer didn't yield better results). 
+
+The number of neurons/channels for each layer and bottleneck in Resnet50 are:
+
+| layer | bottleneck | neurons |
 | :--------: | :------------:| :-----: |
-| 0 | [0..2] | 256 |
-| 1 | [0..3] | 512 |
-| 2 | [0..5] | 1024 |
-| 3 | [0..2] | 2048 |
-
-
+| 4 | [0..2] | 256 |
+| 5 | [0..3] | 512 |
+| 6 | [0..5] | 1024 |
+| 7 | [0..2] | 2048 |
