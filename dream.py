@@ -27,8 +27,9 @@ class Dreamer:
         pass
 
     def get_filename(self, **kwargs):
-        filename = "neur_" + str(kwargs['neuron']).zfill(4) + "_oct_" + str(kwargs['octaves']) + "_octscale_" + str(
-            kwargs['octave_scale']) + "_its_" + str(kwargs['iterations']) + "_offset_" + str(kwargs['offset']) + ".jpg"
+        filename = "neur_" + str(kwargs['neuron']).zfill(4) + "_oct_" + str(kwargs['octaves']) +\
+                   "_octscale_" + str(kwargs['octave_scale']) + "_its_" + str(kwargs['iterations']) +\
+                   "_offset_" + str(kwargs['offset']) + "_lr_"+str(kwargs['lr'])+".jpg"
         return filename
 
     def dream(self, image, iterations, lr, neuron, offset):
